@@ -16,8 +16,7 @@
 #
 
 from typing import List
-
-from enum import Enum
+from jinja2 import Environment, FileSystemLoader
 
 from engine.config import USERNAME, PASSWORD, SECRET
 from engine.objects.base.device import ConnectionType
@@ -78,11 +77,13 @@ class IOSSwitch(Switch):
         return result
 
     def SendConfig(self):
-        config = ["enable", self.secret, "config t"]
-        for x in self.interfaces:
-            config.extend(self.__GetInterfaceConfig(x))
+        env = Environment(loader=FileSystemLoader('engine/templates/cisco'))
 
-        result = self._CliCommand(config)
+        template = env.get_template('switch_interface.txt')
+
+        output = template.render(secret="cisco", interfaces=self.interfaces)
+
+        result = self._CliCommand(output.splitlines())
 
         for x in result:
-            print(result)
+            print(x)

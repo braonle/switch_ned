@@ -35,7 +35,7 @@ for x in HOSTS:
 
 intf = SwitchInterface(InterfaceType.PHYSICAL, "0/1")
 intf.access_port = True
-intf.access_vlan = 20
+intf.access_vlan = 30
 intf.shutdown = False
 
 for x in switches:
