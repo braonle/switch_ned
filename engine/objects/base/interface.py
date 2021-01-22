@@ -30,7 +30,6 @@ class SwitchInterface:
     access_vlan: int
     access_port: bool
     mtu: int
-    erase: bool
 
     def __init__(self, intf_number: str):
 
@@ -44,5 +43,4 @@ class SwitchInterface:
         self.interface_number = intf_number
         self.access_port = True
         self.mtu = 1500
-        self.erase = False
 

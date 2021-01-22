@@ -44,8 +44,7 @@ class Switch(Device):
 
     def RemoveInterface(self, intf_type: InterfaceType, intf_number: str):
         for x in self.interfaces:
-            if x.interface_type == intf_type and \
-                    x.interface_number == intf_number:
+            if x.interface_type == intf_type and x.interface_number == intf_number:
                 self.interfaces.remove(x)
 
     def __GetInterfaceConfig(self, intf: SwitchInterface) -> List[str]:
