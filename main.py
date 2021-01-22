@@ -33,10 +33,11 @@ for x in HOSTS:
 # switch.AddInterface(SwitchInterface(InterfaceType.PORTCHANNEL, "50"))
 # switch.AddInterface(SwitchInterface(InterfaceType.PHYSICAL, "2/30"))
 
-intf = SwitchInterface(InterfaceType.PHYSICAL, "0/1")
+intf = SwitchInterface("0/1")
 intf.access_port = True
 intf.access_vlan = 30
 intf.shutdown = False
+intf.mtu = 1200
 
 for x in switches:
     x.AddInterface(intf)

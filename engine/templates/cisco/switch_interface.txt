@@ -1,38 +1,32 @@
+#jinja2: lstrip_blocks: True
 enable
 {{ secret }}
 config t
-{% for intf in interfaces %}
-    {% if intf.interface_end is none %}
-        {% if intf.interface_type == (3,) %}
-        interface vlan {{intf.interface_start}}
-        {% elif intf.interface_type == (2,) %}
-        interface portchannel {{intf.interface_start}}
-        {% elif intf.interface_type == (1,) %}
-        interface Gigabit {{intf.interface_start}}
-        {% endif %}
-    {% else %}
-        {% if intf.interface_type == 3 %}
-        interface range vlan {{intf.interface_start}} - {{intf.interface_end}}
-        {% elif intf.interface_type == 2 %}
-        interface range portchannel {{intf.interface_start}} - {{intf.interface_end}}
-        {% elif intf.interface_type == 1 %}
-        interface range Gigabit {{intf.interface_start}} - {{intf.interface_end}}
-        {% endif %}
-    {% endif %}
-    switchport
 
-    {% if intf.access_port %}
+{% for intf in interfaces -%}
+    {% if intf.interface_type == InterfaceType.PORTCHANNEL -%}
+    default interface portchannel {{intf.interface_number}}
+    interface portchannel {{intf.interface_number}}
+    {% elif intf.interface_type == InterfaceType.PHYSICAL -%}
+    default interface Gigabit {{intf.interface_number}}
+    interface Gigabit {{intf.interface_number}}
+    {% endif -%}
+
+    switchport
+    {% if intf.access_port -%}
     switchport mode access
     switchport access vlan {{intf.access_vlan}}
-    {% else %}
+    {% else -%}
     switchport mode trunk
     switchport trunk native vlan {{intf.access_vlan}}
-    {% endif %}
+    {% endif -%}
 
-    {% if intf.shutdown %}
+    {% if intf.shutdown -%}
     shutdown
-    {% else %}
+    {% else -%}
     no shutdown
-    {% endif %}
+    {% endif -%}
 
-{% endfor %}
+    mtu {{ intf.mtu }}
+
+{% endfor -%}
