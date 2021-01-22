@@ -15,7 +15,7 @@
 #	or implied.
 #
 from engine.objects.base.device import DeviceType
-from engine.objects.base.interface import SwitchInterface, InterfaceType
+from engine.objects.base.interface import SwitchInterface
 from engine.objects.base.switch import SwitchType
 from engine.objects.cisco.ios_switch import IOSSwitch
 from hosts import HOSTS
@@ -33,10 +33,11 @@ for x in HOSTS:
 # switch.AddInterface(SwitchInterface(InterfaceType.PORTCHANNEL, "50"))
 # switch.AddInterface(SwitchInterface(InterfaceType.PHYSICAL, "2/30"))
 
-intf = SwitchInterface(InterfaceType.PHYSICAL, "0/1")
+intf = SwitchInterface("0/1")
 intf.access_port = True
 intf.access_vlan = 20
-intf.shutdown = False
+intf.shutdown = True
+intf.mtu = 1500
 
 for x in switches:
     x.AddInterface(intf)

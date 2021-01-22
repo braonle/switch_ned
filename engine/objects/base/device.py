@@ -14,20 +14,20 @@
 #	IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #	or implied.
 #
-
 import paramiko
 
 from typing import List
 from time import sleep
+from enum import Enum
 
 from engine.config import USERNAME, PASSWORD, SECRET
 
 
-class DeviceType:
+class DeviceType(Enum):
     SWITCH = 1
 
 
-class ConnectionType:
+class ConnectionType(Enum):
     SSH = 1,
     TELNET = 2
 

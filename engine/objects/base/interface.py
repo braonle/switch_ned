@@ -14,40 +14,32 @@
 #	IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #	or implied.
 #
-
-from engine.objects.base.aux import ReturnCode
-from engine.objects.base.aux import ConfigurationItem
+from enum import Enum
 
 
-class InterfaceType:
+class InterfaceType(Enum):
     PHYSICAL = 1,
     PORTCHANNEL = 2,
-    SVI = 3
 
 
-class SwitchInterface(ConfigurationItem):
+class SwitchInterface:
     interface_type: InterfaceType
-    interface_start: str
-    interface_end: str
+    interface_number: str
 
     shutdown: bool
     access_vlan: int
     access_port: bool
+    mtu: int
 
-    def __init__(self, intf_type: InterfaceType, intf_start: str, intf_end: str = None):
-        self.interface_type = intf_type
+    def __init__(self, intf_number: str):
+        if "/" in intf_number:
+            self.interface_type = InterfaceType.PHYSICAL
+        else:
+            self.interface_type = InterfaceType.PORTCHANNEL
+
         self.shutdown = True
         self.access_vlan = 0
-        self.interface_start = intf_start
-        self.interface_end = intf_end
+        self.interface_number = intf_number
         self.access_port = True
-
-    def SetShutdown(self, shutdown: bool) -> None:
-        self.shutdown = shutdown
-
-    def SetAccessVlan(self, access_vlan: int) -> None:
-        self.access_vlan = access_vlan
-
-    def SetAccessPort(self, access_port: bool) -> None:
-        self.access_port = access_port
+        self.mtu = 1500
 

@@ -20,7 +20,7 @@ from typing import List
 from enum import Enum
 
 from engine.config import USERNAME, PASSWORD, SECRET
-from engine.objects.base.device import DeviceType, ConnectionType, Device
+from engine.objects.base.device import ConnectionType, Device
 from engine.objects.base.interface import InterfaceType, SwitchInterface
 
 
@@ -42,11 +42,9 @@ class Switch(Device):
         self.interfaces.append(interface)
         return
 
-    def RemoveInterface(self, intf_type: InterfaceType, intf_start: str, intf_end: str = None):
+    def RemoveInterface(self, intf_type: InterfaceType, intf_number: str):
         for x in self.interfaces:
-            if x.interface_type == intf_type and \
-                    x.interface_start == intf_start and \
-                    x.interface_end == intf_end:
+            if x.interface_type == intf_type and x.interface_number == intf_number:
                 self.interfaces.remove(x)
 
     def __GetInterfaceConfig(self, intf: SwitchInterface) -> List[str]:

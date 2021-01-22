@@ -50,30 +50,18 @@ class IOSSwitch(Switch):
         else:
             config.append("no shutdown")
 
-        if intf.interface_end is None:
-            """Generate possible interface definitions for a single interface"""
-            if intf.interface_type == InterfaceType.SVI:
-                result.append(f"interface vlan {intf.interface_start}")
+        config.append(f"mtu {intf.mtu}")
+
+        """Generate possible interface definitions for a single interface"""
+        if intf.interface_type == InterfaceType.PORTCHANNEL:
+            result.append(f"default interface portchannel {intf.interface_number}")
+            result.append(f"interface portchannel {intf.interface_number}")
+            result.extend(config)
+        elif intf.interface_type == InterfaceType.PHYSICAL:
+            for x in self.__physical_intf_types__:
+                result.append(f"default interface {x} {intf.interface_number}")
+                result.append(f"interface {x} {intf.interface_number}")
                 result.extend(config)
-            elif intf.interface_type == InterfaceType.PORTCHANNEL:
-                result.append(f"interface portchannel {intf.interface_start}")
-                result.extend(config)
-            elif intf.interface_type == InterfaceType.PHYSICAL:
-                for x in self.__physical_intf_types__:
-                    result.append(f"interface {x} {intf.interface_start}")
-                    result.extend(config)
-        else:
-            """Generate possible interface definitions for a range"""
-            if intf.interface_type == InterfaceType.SVI:
-                result.append(f"interface range vlan {intf.interface_start} - {intf.interface_end}")
-                result.extend(config)
-            elif intf.interface_type == InterfaceType.PORTCHANNEL:
-                result.append(f"interface range portchannel {intf.interface_start} - {intf.interface_end}")
-                result.extend(config)
-            elif intf.interface_type == InterfaceType.PHYSICAL:
-                for x in self.__physical_intf_types__:
-                    result.append(f"interface range {x} {intf.interface_start} - {intf.interface_end}")
-                    result.extend(config)
 
         return result
 
@@ -83,6 +71,3 @@ class IOSSwitch(Switch):
             config.extend(self.__GetInterfaceConfig(x))
 
         result = self._CliCommand(config)
-
-        for x in result:
-            print(result)
