@@ -16,15 +16,13 @@
 #
 from enum import Enum
 
-from engine.objects.base.aux import ConfigurationItem
-
 
 class InterfaceType(Enum):
     PHYSICAL = 1,
     PORTCHANNEL = 2
 
 
-class SwitchInterface(ConfigurationItem):
+class SwitchInterface:
     interface_type: InterfaceType
     interface_number: str
 
